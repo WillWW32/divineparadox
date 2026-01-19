@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Paradox | We Make Visual Art</title>
+    <meta name="description" content="A production house of impossible visuals">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-deep: #06060a;
+            --bg-mid: #0a0a12;
+            --indigo: #6366f1;
+            --indigo-glow: #818cf8;
+            --indigo-bright: #a5b4fc;
+            --silver: #d1d5db;
+            --silver-dim: #6b7280;
+            --white: #f9fafb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg-deep);
+        }
+        
+        body {
+            background: var(--bg-deep);
+            color: var(--white);
+            font-family: 'DM Mono', monospace;
+            overflow-x: hidden;
+            cursor: none;
+            min-height: 100vh;
+        }
+        
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--indigo-glow);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+        }
+        
+        .cursor-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--indigo);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+        }
+        
+        .cursor.hover {
+            width: 60px;
+            height: 60px;
+            border-color: var(--white);
+        }
+        
+        /* Background with depth */
+        .bg-base {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse 100% 100% at 50% 50%, #0c0c18 0%, var(--bg-deep) 70%),
+                var(--bg-deep);
+        }
+        
+        /* Depth layers - subtle color pools */
+        .bg-depth {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse 40% 35% at 20% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 80% 70%, rgba(124, 58, 237, 0.05) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 60% 20%, rgba(67, 56, 202, 0.04) 0%, transparent 60%);
+        }
+        
+        /* Lens flare - anamorphic streak */
+        .lens-flare {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .flare-streak {
+            position: absolute;
+            top: 50%;
+            left: -10%;
+            width: 120%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(99, 102, 241, 0) 15%,
+                rgba(99, 102, 241, 0.15) 30%,
+                rgba(165, 180, 252, 0.4) 45%,
+                rgba(255, 255, 255, 0.6) 50%,
+                rgba(165, 180, 252, 0.4) 55%,
+                rgba(99, 102, 241, 0.15) 70%,
+                rgba(99, 102, 241, 0) 85%,
+                transparent 100%
+            );
+            transform: translateY(-50%);
+            filter: blur(1px);
+            animation: flareShift 8s ease-in-out infinite;
+        }
+        
+        .flare-streak-soft {
+            position: absolute;
+            top: 50%;
+            left: -20%;
+            width: 140%;
+            height: 40px;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                rgba(99, 102, 241, 0) 20%,
+                rgba(99, 102, 241, 0.03) 35%,
+                rgba(129, 140, 248, 0.08) 50%,
+                rgba(99, 102, 241, 0.03) 65%,
+                rgba(99, 102, 241, 0) 80%,
+                transparent 100%
+            );
+            transform: translateY(-50%);
+            filter: blur(20px);
+        }
+        
+        .flare-orb {
+            position: absolute;
+            top: 48%;
+            left: 52%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(165, 180, 252, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            filter: blur(30px);
+            animation: orbPulse 6s ease-in-out infinite;
+        }
+        
+        .flare-orb-small {
+            position: absolute;
+            top: 51%;
+            left: 38%;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(199, 210, 254, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            filter: blur(10px);
+            animation: orbPulse 4s ease-in-out infinite reverse;
+        }
+        
+        @keyframes flareShift {
+            0%, 100% { opacity: 0.6; transform: translateY(-50%) translateX(0); }
+            50% { opacity: 1; transform: translateY(-50%) translateX(2%); }
+        }
+        
+        @keyframes orbPulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        /* Vignette */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(6,6,10,0.8) 100%);
+        }
+        
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Logo Container */
+        .wordmark-container {
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .wordmark {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .word-divine {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 9vw, 7rem);
+            font-weight: 300;
+            color: var(--white);
+            letter-spacing: 0.02em;
+            text-shadow: 
+                0 0 40px rgba(99, 102, 241, 0.3),
+                0 0 80px rgba(99, 102, 241, 0.15);
+        }
+        
+        .word-divider {
+            width: 3px;
+            height: clamp(50px, 8vw, 80px);
+            background: var(--indigo);
+            align-self: center;
+            animation: cursorBlink 1s step-end infinite;
+        }
+        
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+        
+        .word-paradox {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+            font-weight: 400;
+            color: var(--silver);
+            letter-spacing: 0.25em;
+            align-self: center;
+            position: relative;
+        }
+        
+        .word-paradox-reflection {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+            font-weight: 400;
+            letter-spacing: 0.25em;
+            color: var(--silver);
+            transform: scaleY(-1);
+            opacity: 0.15;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 80%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 80%);
+            pointer-events: none;
+        }
+        
+        .tagline {
+            margin-top: 2.5rem;
+            font-size: clamp(0.6rem, 1.2vw, 0.8rem);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--indigo-glow);
+            opacity: 0;
+            transform: translateY(20px);
+            font-weight: 300;
+        }
+        
+        .subline {
+            margin-top: 2rem;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+            letter-spacing: 0.15em;
+            color: var(--silver-dim);
+            opacity: 0;
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            transition: color 0.5s ease;
+        }
+        
+        .subline:hover {
+            color: var(--indigo-glow);
+        }
+        
+        /* Floating Navigation */
+        .nav-float {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 3rem;
+            z-index: 100;
+            opacity: 0;
+        }
+        
+        .nav-link {
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--silver-dim);
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+            font-weight: 300;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--indigo);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            color: var(--white);
+        }
+        
+        .nav-link:hover::before {
+            width: 100%;
+        }
+        
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 8rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+        }
+        
+        .scroll-line {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--indigo), transparent);
+            animation: scrollPulse 2.5s ease-in-out infinite;
+        }
+        
+        @keyframes scrollPulse {
+            0%, 100% { transform: scaleY(1); opacity: 0.6; }
+            50% { transform: scaleY(0.6); opacity: 1; }
+        }
+        
+        /* Reveal Section */
+        .reveal-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+        
+        .symbol-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 4rem;
+        }
+        
+        .paradox-symbol {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+        }
+        
+        .paradox-symbol svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Email Capture */
+        .join-container {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .join-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: var(--silver-dim);
+            margin-bottom: 1.2rem;
+            text-align: center;
+            font-weight: 300;
+        }
+        
+        .join-form {
+            display: flex;
+            gap: 0;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+            background: rgba(10, 10, 18, 0.8);
+            backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+        
+        .join-form:focus-within {
+            border-color: var(--indigo);
+        }
+        
+        .join-input {
+            background: transparent;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: var(--white);
+            width: 260px;
+            outline: none;
+            letter-spacing: 0.05em;
+        }
+        
+        .join-input::placeholder {
+            color: var(--silver-dim);
+            letter-spacing: 0.1em;
+        }
+        
+        .join-btn {
+            background: var(--indigo);
+            border: none;
+            padding: 1rem 1.5rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--white);
+            cursor: none;
+            transition: background 0.3s ease;
+            font-weight: 400;
+        }
+        
+        .join-btn:hover {
+            background: var(--indigo-glow);
+        }
+        
+        /* Footer */
+        .footer {
+            position: relative;
+            padding: 2rem 2rem 8rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-text {
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            color: var(--silver-dim);
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+            font-weight: 300;
+        }
+        
+        .footer-text:hover {
+            opacity: 0.8;
+        }
+        
+        .footer-year {
+            cursor: none;
+            position: relative;
+        }
+        
+        .footer-year::after {
+            content: 'The impossible awaits';
+            position: absolute;
+            bottom: 180%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.75rem;
+            color: var(--indigo-glow);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            letter-spacing: 0.1em;
+        }
+        
+        .footer-year:hover::after {
+            opacity: 1;
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .wordmark {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .word-divider {
+                width: 60px;
+                height: 3px;
+            }
+            
+            .nav-float {
+                gap: 2rem;
+            }
+            
+            .join-input {
+                width: 180px;
+                padding: 0.8rem 1rem;
+            }
+            
+            .join-btn {
+                padding: 0.8rem 1rem;
+            }
+            
+            .symbol-container {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+    
+    <!-- Background layers -->
+    <div class="bg-base"></div>
+    <div class="bg-depth"></div>
+    
+    <!-- Lens flare -->
+    <div class="lens-flare">
+        <div class="flare-streak-soft"></div>
+        <div class="flare-streak"></div>
+        <div class="flare-orb"></div>
+        <div class="flare-orb-small"></div>
+    </div>
+    
+    <!-- Vignette -->
+    <div class="vignette"></div>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="wordmark-container">
+                <div class="wordmark">
+                    <span class="word-divine">Divine</span>
+                    <div class="word-divider"></div>
+                    <span class="word-paradox">
+                        PARADOX
+                        <span class="word-paradox-reflection" aria-hidden="true">PARADOX</span>
+                    </span>
+                </div>
+                
+                <p class="tagline">We Make Visual Art</p>
+                <p class="subline">Visions made visible</p>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+        
+        <!-- Reveal Section -->
+        <section class="reveal-section">
+            <div class="symbol-container">
+                <div class="paradox-symbol">
+                    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <ellipse cx="100" cy="100" rx="70" ry="45" stroke="url(#symbolGrad)" stroke-width="0.5" fill="none" opacity="0.5"/>
+                        <ellipse cx="100" cy="100" rx="50" ry="32" stroke="url(#symbolGrad)" stroke-width="0.5" fill="none" opacity="0.3"/>
+                        <ellipse cx="100" cy="100" rx="30" ry="19" stroke="url(#symbolGrad)" stroke-width="0.5" fill="none" opacity="0.2"/>
+                        <line x1="100" y1="40" x2="100" y2="160" stroke="#6366f1" stroke-width="0.5" opacity="0.6"/>
+                        <circle cx="100" cy="100" r="2" fill="#6366f1" opacity="0.8"/>
+                        <defs>
+                            <linearGradient id="symbolGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#d1d5db"/>
+                                <stop offset="100%" stop-color="#6366f1"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="join-container">
+                <p class="join-label">Join the Paradox</p>
+                <form class="join-form" onsubmit="handleSubmit(event)">
+                    <input type="email" class="join-input" placeholder="your@email.com" required>
+                    <button type="submit" class="join-btn">Enter</button>
+                </form>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">
+                A production house of impossible visuals • Montana-born • 
+                <span class="footer-year">2025</span>
+            </p>
+        </footer>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="nav-float">
+        <a href="mailto:jesse@entreartists.com?subject=Studio%20Inquiry" class="nav-link">Studio</a>
+        <a href="mailto:jesse@entreartists.com" class="nav-link">Contact</a>
+    </nav>
+    
+    <script>
+        // ============================================
+        // CUSTOM CURSOR
+        // ============================================
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let dotX = 0, dotY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            dotX += (mouseX - dotX) * 0.25;
+            dotY += (mouseY - dotY) * 0.25;
+            
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            cursorDot.style.left = dotX - 2 + 'px';
+            cursorDot.style.top = dotY - 2 + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        
+        // Cursor hover states
+        const hoverElements = document.querySelectorAll('a, button, input, .footer-year');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+        
+        // ============================================
+        // GSAP ANIMATIONS
+        // ============================================
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const tl = gsap.timeline({ delay: 0.3 });
+        
+        tl.to('.wordmark-container', {
+            opacity: 1,
+            y: 0,
+            duration: 1.4,
+            ease: 'power3.out'
+        })
+        .to('.tagline', {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power2.out'
+        }, '-=0.8')
+        .to('.subline', {
+            opacity: 0.6,
+            duration: 1.2,
+            ease: 'power2.out'
+        }, '-=0.5')
+        .to('.scroll-indicator', {
+            opacity: 0.5,
+            duration: 1,
+            ease: 'power2.out'
+        }, '-=0.6')
+        .to('.nav-float', {
+            opacity: 1,
+            duration: 1,
+            ease: 'power2.out'
+        }, '-=0.8');
+        
+        // Scroll animations
+        gsap.to('.paradox-symbol', {
+            scrollTrigger: {
+                trigger: '.reveal-section',
+                start: 'top 80%',
+                end: 'top 30%',
+                scrub: 1
+            },
+            opacity: 0.8,
+            rotation: 90,
+            scale: 1.1
+        });
+        
+        gsap.to('.join-container', {
+            scrollTrigger: {
+                trigger: '.reveal-section',
+                start: 'top 50%',
+                toggleActions: 'play none none reverse'
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: 'power2.out'
+        });
+        
+        gsap.to('.wordmark-container', {
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            },
+            y: 150,
+            opacity: 0
+        });
+        
+        // ============================================
+        // FORM HANDLER
+        // ============================================
+        function handleSubmit(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            window.location.href = `mailto:jesse@entreartists.com?subject=Join%20the%20Paradox&body=Email:%20${email}`;
+        }
+    </script>
+</body>
+</html>
