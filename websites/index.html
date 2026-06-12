@@ -19,7 +19,7 @@
       "provider": {
         "@type": "LocalBusiness",
         "name": "Divine Paradox",
-        "telephone": "+14069269950",
+        "telephone": "+14069267503",
         "email": "jesse@entreartists.com",
         "url": "https://www.divineparadox.org",
         "address": { "@type": "PostalAddress", "addressLocality": "Missoula", "addressRegion": "MT", "addressCountry": "US" }
@@ -96,6 +96,24 @@
   .promise { border: 1px solid #16161f; border-left: 2px solid var(--indigo); padding: 18px 22px; margin-top: 26px; font-size: 17px; color: var(--silver); background: var(--bg-mid); }
   .faq h3 { font-size: 23px; font-weight: 500; color: var(--white); margin: 28px 0 6px; }
   .faq p { font-size: 17px; max-width: 720px; }
+  .scopeform { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; }
+  .scopeform .full { grid-column: 1 / -1; }
+  .scopeform label { display: block; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--silver-dim); margin-bottom: 6px; }
+  .scopeform input, .scopeform textarea, .scopeform select {
+    width: 100%; background: var(--bg-mid); border: 1px solid #1e1e2c; border-radius: 3px;
+    color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 17px; padding: 11px 13px; outline: none; transition: border-color .2s;
+  }
+  .scopeform input:focus, .scopeform textarea:focus, .scopeform select:focus { border-color: var(--indigo); }
+  .scopeform textarea { min-height: 110px; resize: vertical; }
+  .scopeform button {
+    grid-column: 1 / -1; justify-self: start; font-family: 'DM Mono', monospace; font-size: 14px; letter-spacing: 0.06em;
+    color: var(--white); background: transparent; border: 1px solid var(--indigo); border-radius: 3px; padding: 14px 34px; cursor: pointer; transition: all .2s;
+  }
+  .scopeform button:hover { background: rgba(99,102,241,0.15); box-shadow: 0 0 24px rgba(99,102,241,0.25); }
+  .scopeform button:disabled { opacity: 0.5; cursor: wait; }
+  .form-note { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--silver-dim); margin-top: 14px; }
+  .form-status { grid-column: 1 / -1; font-size: 18px; color: var(--indigo-bright); display: none; }
+  @media (max-width: 600px) { .scopeform { grid-template-columns: 1fr; } }
   footer { border-top: 1px solid #16161f; padding: 32px 0 48px; }
   footer .wrap { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--silver-dim); }
   footer a { color: var(--silver); text-decoration: none; }
@@ -107,7 +125,7 @@
 <header>
   <div class="wrap">
     <div class="mark"><a href="/">DIVINE <span>PARADOX</span></a></div>
-    <nav><a href="tel:+14069269950">(406) 926-9950</a><a href="mailto:jesse@entreartists.com?subject=Website%20Inquiry">Contact</a></nav>
+    <nav><a href="tel:+14069267503">(406) 926-7503</a><a href="mailto:jesse@entreartists.com?subject=Website%20Inquiry">Contact</a></nav>
   </div>
 </header>
 
@@ -116,7 +134,8 @@
     <div class="kicker">Web Design &bull; Missoula, Montana</div>
     <h1>Missoula web design, with <em>everything handled.</em></h1>
     <p>Designed and written by a Montana production house with 25+ years of design and web development experience. Live within days. Hosting, security, search readiness, and a monthly content update, all for a flat $300 a month.</p>
-    <a class="cta" href="tel:+14069269950">CALL OR TEXT (406) 926-9950</a>
+    <a class="cta" href="#scope">TELL US ABOUT THE JOB</a>
+    <p class="form-note">Or call <a href="tel:+14069267503" style="color: var(--indigo-bright); text-decoration: none;">(406) 926-7503</a>. Kit answers any hour and will set up a call with Jesse.</p>
   </div>
 </section>
 
@@ -187,10 +206,61 @@
   </div>
 </section>
 
+<section id="scope">
+  <div class="wrap">
+    <h2>Tell us about the job</h2>
+    <form class="scopeform" id="scopeForm">
+      <div><label for="f-name">Your name *</label><input id="f-name" name="name" required maxlength="120"></div>
+      <div><label for="f-business">Business</label><input id="f-business" name="business" maxlength="160"></div>
+      <div><label for="f-phone">Phone *</label><input id="f-phone" name="phone" type="tel" required maxlength="40"></div>
+      <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" maxlength="160"></div>
+      <div><label for="f-website">Current website, if any</label><input id="f-website" name="website" maxlength="200" placeholder="example.com or none"></div>
+      <div><label for="f-timeline">When do you need it</label>
+        <select id="f-timeline" name="timeline">
+          <option value="As soon as possible">As soon as possible</option>
+          <option value="In the next month">In the next month</option>
+          <option value="In the next few months">In the next few months</option>
+          <option value="Just exploring">Just exploring</option>
+        </select>
+      </div>
+      <div class="full"><label for="f-scope">What do you need?</label><textarea id="f-scope" name="scope" maxlength="2000" placeholder="A few sentences about your business and what the site should do."></textarea></div>
+      <button type="submit" id="scopeBtn">SEND IT TO JESSE</button>
+      <p class="form-status" id="scopeStatus"></p>
+    </form>
+    <p class="form-note">Goes straight to Jesse. He calls back within one business day. Prefer to talk now? Call <a href="tel:+14069267503" style="color: var(--indigo-bright); text-decoration: none;">(406) 926-7503</a> and Kit will set it up.</p>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
-    DIVINE PARADOX &bull; MISSOULA, MONTANA &bull; <a href="tel:+14069269950">(406) 926-9950</a> &bull; <a href="mailto:jesse@entreartists.com">JESSE@ENTREARTISTS.COM</a>
+    DIVINE PARADOX &bull; MISSOULA, MONTANA &bull; <a href="tel:+14069267503">(406) 926-7503</a> &bull; <a href="mailto:jesse@entreartists.com">JESSE@ENTREARTISTS.COM</a>
   </div>
 </footer>
+
+<script>
+document.getElementById('scopeForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  var btn = document.getElementById('scopeBtn');
+  var status = document.getElementById('scopeStatus');
+  var data = Object.fromEntries(new FormData(this).entries());
+  btn.disabled = true; btn.textContent = 'SENDING...';
+  try {
+    var res = await fetch('https://starfish-production-c267.up.railway.app/api/webhook/dp-design-inquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('bad response');
+    this.querySelectorAll('input, textarea, select, button').forEach(function (el) { el.style.display = 'none'; });
+    this.querySelectorAll('label').forEach(function (el) { el.style.display = 'none'; });
+    status.style.display = 'block';
+    status.textContent = 'Got it. Jesse will call you within one business day.';
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'SEND IT TO JESSE';
+    status.style.display = 'block';
+    status.textContent = 'Something went wrong. Call (406) 926-7503 and Kit will take it down.';
+  }
+});
+</script>
 </body>
 </html>
