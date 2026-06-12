@@ -74,6 +74,15 @@
   .cta { display: inline-block; margin-top: 34px; font-family: 'DM Mono', monospace; font-size: 14px; color: var(--white); text-decoration: none; border: 1px solid var(--indigo); padding: 14px 30px; border-radius: 3px; letter-spacing: 0.06em; transition: all .2s; }
   .cta:hover { background: rgba(99,102,241,0.15); box-shadow: 0 0 24px rgba(99,102,241,0.25); }
   section { padding: 56px 0; border-top: 1px solid #16161f; }
+  .marquee-section { padding: 30px 0; border-top: 1px solid #16161f; overflow: hidden; }
+  .marquee-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--silver-dim); text-align: center; margin-bottom: 22px; }
+  .marquee { display: flex; width: max-content; animation: scroll 36s linear infinite; }
+  .marquee:hover { animation-play-state: paused; }
+  .m-item { display: inline-flex; flex-direction: column; align-items: center; padding: 0 38px; text-decoration: none; white-space: nowrap; }
+  .m-item .name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: var(--white); transition: color .2s; }
+  .m-item .domain { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: var(--silver-dim); margin-top: 2px; }
+  .m-item:hover .name { color: var(--indigo-bright); }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
   h2 { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--indigo-glow); margin-bottom: 26px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
   .card { border: 1px solid #16161f; border-radius: 4px; padding: 22px; background: var(--bg-mid); }
@@ -108,6 +117,26 @@
     <h1>Missoula web design, with <em>everything handled.</em></h1>
     <p>Designed and written by a Montana production house with 25+ years of design and web development experience. Live within days. Hosting, security, search readiness, and a monthly content update, all for a flat $300 a month.</p>
     <a class="cta" href="tel:+14069269950">CALL OR TEXT (406) 926-9950</a>
+  </div>
+</section>
+
+<section class="marquee-section">
+  <div class="marquee-label">Selected work &bull; designed and built by Divine Paradox</div>
+  <div class="marquee">
+    <a class="m-item" href="https://withjess.ai" target="_blank" rel="noopener"><span class="name">WithJess</span><span class="domain">withjess.ai</span></a>
+    <a class="m-item" href="https://home.3birdsstudio.com" target="_blank" rel="noopener"><span class="name">3 Birds Studio</span><span class="domain">3birdsstudio.com</span></a>
+    <a class="m-item" href="https://floriabridal.com" target="_blank" rel="noopener"><span class="name">Floria Bridal</span><span class="domain">floriabridal.com</span></a>
+    <a class="m-item" href="https://homescool.org" target="_blank" rel="noopener"><span class="name">Homescool</span><span class="domain">homescool.org</span></a>
+    <a class="m-item" href="https://localhustle.org" target="_blank" rel="noopener"><span class="name">LocalHustle</span><span class="domain">localhustle.org</span></a>
+    <a class="m-item" href="https://mountaingoat.co" target="_blank" rel="noopener"><span class="name">Mountain Goats</span><span class="domain">mountaingoat.co</span></a>
+    <a class="m-item" href="https://bigstarfish.com" target="_blank" rel="noopener"><span class="name">BigStarfish</span><span class="domain">bigstarfish.com</span></a>
+    <a class="m-item" href="https://withjess.ai" target="_blank" rel="noopener"><span class="name">WithJess</span><span class="domain">withjess.ai</span></a>
+    <a class="m-item" href="https://home.3birdsstudio.com" target="_blank" rel="noopener"><span class="name">3 Birds Studio</span><span class="domain">3birdsstudio.com</span></a>
+    <a class="m-item" href="https://floriabridal.com" target="_blank" rel="noopener"><span class="name">Floria Bridal</span><span class="domain">floriabridal.com</span></a>
+    <a class="m-item" href="https://homescool.org" target="_blank" rel="noopener"><span class="name">Homescool</span><span class="domain">homescool.org</span></a>
+    <a class="m-item" href="https://localhustle.org" target="_blank" rel="noopener"><span class="name">LocalHustle</span><span class="domain">localhustle.org</span></a>
+    <a class="m-item" href="https://mountaingoat.co" target="_blank" rel="noopener"><span class="name">Mountain Goats</span><span class="domain">mountaingoat.co</span></a>
+    <a class="m-item" href="https://bigstarfish.com" target="_blank" rel="noopener"><span class="name">BigStarfish</span><span class="domain">bigstarfish.com</span></a>
   </div>
 </section>
 
