@@ -328,6 +328,45 @@
             font-family: 'Cormorant Garamond', serif;
             transition: color 0.5s ease;
         }
+
+        .site-cta-line {
+            margin-top: 2.6rem;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.05rem, 2.3vw, 1.5rem);
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: 0.02em;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: dpFadeUp 1.2s ease 1.8s forwards;
+        }
+
+        .site-cta-btn {
+            display: inline-block;
+            margin-top: 1.1rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--white);
+            border: 1px solid var(--indigo);
+            border-radius: 3px;
+            padding: 0.85rem 1.9rem;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: dpFadeUp 1.2s ease 2.1s forwards;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .site-cta-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 24px rgba(99, 102, 241, 0.25);
+        }
+
+        @keyframes dpFadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
         
         .subline:hover {
             color: var(--indigo-glow);
@@ -609,6 +648,8 @@
                 
                 <p class="tagline">We Make Visual Art</p>
                 <p class="subline">Visions made visible</p>
+                <p class="site-cta-line">Real beautiful websites that attract real business.</p>
+                <a class="site-cta-btn" href="/websites">Website Design &rarr;</a>
             </div>
             
             <div class="scroll-indicator">
